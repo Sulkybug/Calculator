@@ -1,0 +1,169 @@
+html {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#root {
+  max-width: 1280px;
+  height: 80vh;
+  width: 540px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: black;
+  border: 10px;
+}
+
+.outputScreen {
+  font-size: 45px;
+  border-radius: 5px;
+  border-bottom: solid 1px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding-right: 15px;
+}
+
+.operation {
+  margin-bottom: 10px;
+  max-width: 540px;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  scroll-behavior: smooth;
+  scrollbar-gutter: none;
+  scrollbar-color: rgba(255, 68, 0, 0.315) #242424;
+  scrollbar-width: thin;
+}
+
+.result {
+  color: rgba(250, 235, 215, 0.274);
+  font-size: 35px;
+  margin-top: 0;
+  max-width: 540px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-gutter: none;
+  scrollbar-color: rgba(255, 68, 0, 0.315) #242424;
+  scrollbar-width: thin;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 2fr);
+  font-size: 25px;
+  border-radius: 50px;
+}
+
+button {
+  margin: 5px;
+  border-radius: 50px;
+  width: 120px;
+  height: 80px;
+}
+
+.operatorsKeys {
+  color: orangered;
+}
+
+.resultButton {
+  background-color: orangered;
+  border-radius: 50px;
+  font-weight: bold;
+  grid-column: 4;
+  grid-row: 5;
+}
+
+.resultButton:hover {
+  border: solid 2px white;
+}
+
+.clear {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.delete {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.seven {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.eight {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.nine {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.four {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.five {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.six {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.one {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.two {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.three {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+.zero {
+  grid-column: 2;
+  grid-row: 5;
+}
+
+.decimal {
+  grid-column: 3;
+  grid-row: 5;
+  color: #fff;
+}
+
+.addition {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+.subtraction {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.multiplication {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.division {
+  grid-column: 4;
+  grid-row: 1;
+}
