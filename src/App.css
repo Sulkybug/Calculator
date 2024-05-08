@@ -2,6 +2,8 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
 #root {
   max-width: 1280px;
@@ -166,4 +168,16 @@ button {
 .division {
   grid-column: 4;
   grid-row: 1;
+}
+
+@media (max-width: 800px) {
+  #root {
+    scale: 0.75;
+    min-height: 650px;
+  }
+
+  #container {
+    width: auto;
+    height: auto;
+  }
 }

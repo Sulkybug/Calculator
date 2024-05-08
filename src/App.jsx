@@ -22,7 +22,7 @@ function App() {
 
   const handleClickOp = (e) => {
     let op = e.currentTarget.getAttribute("data-value");
-    if (screen != "0" && screen.length > 1) {
+    if (screen != "0" && screen.length >= 1) {
       if (checkSymbols(1)) {
       } else {
         setScreen(screen + op);
@@ -49,19 +49,61 @@ function App() {
     if (screen == 0 && screen.length == 1) {
       setResult("");
     } else {
-      if (checkSymbols(1)) {
+      let specialChars = /[\s~"x`!@#$^&*(){}\[\];:"'<,>?\/\\|_+=-]/g;
+      if (
+        specialChars.test(screen) &&
+        screen.includes("%", screen.length - 1)
+      ) {
+        percentage();
+      } else if (screen.includes("%", screen.length - 1)) {
+        setScreen(`${eval(screen.replace("%", "/100"))}`);
+      } else if (checkSymbols(1)) {
         setResult(
-          "=" + screen.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
+          "=" + screen.replace(/[\s~"x`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
         );
       } else if (isNaN(Number(screen))) {
-        setResult("=" + eval(screen));
+        setResult("=" + eval(screen.replace("x", "*")));
+      } else if (!isNaN(Number(screen))) {
+        setResult("=" + eval(screen.replace("x", "*")));
       } else {
         setResult(
-          "=" + screen.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
+          "=" + screen.replace(/[\s~"x`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
         );
       }
     }
   }, [screen]);
+
+  const percentage = () => {
+    let symbolsArr = [];
+    for (let i = 0; i < operators.length; i++) {
+      if (screen.includes(operators[i].symbol) && operators[i].symbol != "%") {
+        let arrScreen = screen.replace("%", "");
+        symbolsArr.push(operators[i].symbol);
+        arrScreen = arrScreen.replace(
+          /[\s~"x`!@#$^&*(){}\[\];:"'<,>?\/\\|_+=-]/g,
+          "."
+        );
+        arrScreen = arrScreen.split(".");
+        console.log(arrScreen);
+        console.log(symbolsArr);
+        let result =
+          (Number(arrScreen[arrScreen.length - 2]) *
+            Number(arrScreen.length - 1)) /
+          100;
+        let screenResult = "";
+        let counter = 0;
+        for (let j = 0; j < arrScreen.length; j++) {
+          if (counter < symbolsArr.length - 1) {
+            screenResult += `${arrScreen[j]}${symbolsArr[counter]}`;
+            counter++;
+          } else {
+            screenResult += `${arrScreen[j]}`;
+          }
+        }
+        setScreen(`${screenResult}${result.toString()}`);
+      }
+    }
+  };
 
   const handleResult = () => {
     if (screen == 0) {
@@ -75,7 +117,11 @@ function App() {
   };
 
   const handleDelete = () => {
-    setScreen(screen.slice(0, -1));
+    if (screen.length == 1) {
+      setScreen("0");
+    } else {
+      setScreen(screen.slice(0, -1));
+    }
   };
 
   return (
