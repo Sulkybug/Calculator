@@ -74,35 +74,34 @@ function App() {
   }, [screen]);
 
   const percentage = () => {
-    let symbolsArr = [];
-    for (let i = 0; i < operators.length; i++) {
-      if (screen.includes(operators[i].symbol) && operators[i].symbol != "%") {
-        let arrScreen = screen.replace("%", "");
-        symbolsArr.push(operators[i].symbol);
-        arrScreen = arrScreen.replace(
-          /[\s~"x`!@#$^&*(){}\[\];:"'<,>?\/\\|_+=-]/g,
-          "."
-        );
-        arrScreen = arrScreen.split(".");
-        console.log(arrScreen);
-        console.log(symbolsArr);
-        let result =
-          (Number(arrScreen[arrScreen.length - 2]) *
-            Number(arrScreen.length - 1)) /
-          100;
-        let screenResult = "";
-        let counter = 0;
-        for (let j = 0; j < arrScreen.length; j++) {
-          if (counter < symbolsArr.length - 1) {
-            screenResult += `${arrScreen[j]}${symbolsArr[counter]}`;
-            counter++;
-          } else {
-            screenResult += `${arrScreen[j]}`;
-          }
-        }
-        setScreen(`${screenResult}${result.toString()}`);
+    const sanitizedExpression = screen.replace(/x/g, "*");
+    const expression = sanitizedExpression.split(/([+\-*/])/);
+
+    expression[expression.length - 1] = expression[
+      expression.length - 1
+    ].replace("%", "");
+    // Find the last math operation
+    let LastoperationIndex = -1;
+    for (let i = expression.length - 1; i >= 0; i--) {
+      if (["+", "-", "*", "/"].includes(expression[i])) {
+        LastoperationIndex = i;
+        break;
       }
     }
+
+    let operation = [...expression];
+    operation.splice(LastoperationIndex, 2);
+    let operationStr = operation.join("");
+    let operationResult = eval(operationStr);
+
+    const percentageValue =
+      parseFloat(expression[LastoperationIndex + 1]) / 100;
+    let result = operationResult * percentageValue;
+    setScreen(
+      `${operationStr.replace(/\*/g, "x")}${
+        expression[LastoperationIndex]
+      }${result}`
+    );
   };
 
   const handleResult = () => {

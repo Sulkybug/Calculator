@@ -5,6 +5,13 @@ html {
   height: 100vh;
   width: 100vw;
 }
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #root {
   max-width: 1280px;
   height: 80vh;
@@ -14,6 +21,7 @@ html {
   text-align: center;
   background-color: black;
   border: 10px;
+  border-radius: 20px;
 }
 
 .outputScreen {
@@ -172,7 +180,7 @@ button {
 
 @media (max-width: 800px) {
   #root {
-    scale: 0.75;
+    scale: 0.7;
     min-height: 650px;
   }
 
