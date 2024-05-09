@@ -22,7 +22,9 @@ function App() {
 
   const handleClickOp = (e) => {
     let op = e.currentTarget.getAttribute("data-value");
-    if (screen != "0" && screen.length >= 1) {
+    const expression = screen.split(/([+\-x/])/);
+    if (expression[expression.length - 1].includes(".") && op == ".") {
+    } else if (screen != "0" && screen.length >= 1) {
       if (checkSymbols(1)) {
       } else {
         setScreen(screen + op);

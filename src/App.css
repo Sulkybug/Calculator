@@ -47,6 +47,7 @@ body {
   scrollbar-gutter: none;
   scrollbar-color: rgba(255, 68, 0, 0.315) #242424;
   scrollbar-width: thin;
+  max-height: 75px;
 }
 
 .result {
@@ -74,6 +75,16 @@ button {
   border-radius: 50px;
   width: 120px;
   height: 80px;
+}
+
+button:active {
+  background-color: orangered;
+  color: #fff;
+}
+
+.resultButton:active {
+  background-color: #fff;
+  color: orangered;
 }
 
 .operatorsKeys {
