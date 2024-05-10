@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import numbers from "./Numbers";
-import operators from "./Operators";
+import numbers from "./assets/ButtonsContent/Numbers";
+import operators from "./assets/ButtonsContent/Operators";
+import { handlePercentage } from "./assets/Functions/handlePercentage ";
+import { checkSymbols } from "./assets/Functions/checkSymbols ";
 
 function App() {
   const [screen, setScreen] = useState("0");
@@ -9,7 +11,7 @@ function App() {
 
   const handleClick = (e) => {
     let value = e.currentTarget.getAttribute("data-value");
-    if (checkSymbols(2) && screen[screen.length - 1] == 0) {
+    if (checkSymbols(screen, operators, 2) && screen[screen.length - 1] == 0) {
       setScreen(screen);
     } else {
       if (screen.length == 1 && screen[0] == 0) {
@@ -25,7 +27,7 @@ function App() {
     const expression = screen.split(/([+\-x/])/);
     if (expression[expression.length - 1].includes(".") && op == ".") {
     } else if (screen != "0" && screen.length >= 1) {
-      if (checkSymbols(1)) {
+      if (checkSymbols(screen, operators, 1)) {
       } else {
         setScreen(screen + op);
       }
@@ -34,77 +36,29 @@ function App() {
     }
   };
 
-  const checkSymbols = (num) => {
-    let result = "";
-    for (let i = 0; i < operators.length; i++) {
-      if (screen.includes(operators[i].symbol, screen.length - num)) {
-        result = true;
-        break;
-      } else {
-        result = false;
-      }
-    }
-    return result;
-  };
-
   useEffect(() => {
     if (screen == 0 && screen.length == 1) {
       setResult("");
     } else {
-      let specialChars = /[\s~"x`!@#$^&*(){}\[\];:"'<,>?\/\\|_+=-]/g;
+      let specialChars = /([+\-*/x])/g;
       if (
         specialChars.test(screen) &&
         screen.includes("%", screen.length - 1)
       ) {
-        percentage();
+        handlePercentage(screen, setScreen);
       } else if (screen.includes("%", screen.length - 1)) {
         setScreen(`${eval(screen.replace("%", "/100"))}`);
-      } else if (checkSymbols(1)) {
-        setResult(
-          "=" + screen.replace(/[\s~"x`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
-        );
+      } else if (checkSymbols(screen, operators, 1)) {
+        setResult("=" + screen.replace(/([+\-*/x])/g, ""));
       } else if (isNaN(Number(screen))) {
-        setResult("=" + eval(screen.replace("x", "*")));
+        setResult("=" + eval(screen.replace(/x/g, "*")));
       } else if (!isNaN(Number(screen))) {
-        setResult("=" + eval(screen.replace("x", "*")));
+        setResult("=" + eval(screen.replace(/x/g, "*")));
       } else {
-        setResult(
-          "=" + screen.replace(/[\s~"x`!@#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
-        );
+        setResult("=" + screen.replace(/([+\-*/x])/g, ""));
       }
     }
   }, [screen]);
-
-  const percentage = () => {
-    const sanitizedExpression = screen.replace(/x/g, "*");
-    const expression = sanitizedExpression.split(/([+\-*/])/);
-
-    expression[expression.length - 1] = expression[
-      expression.length - 1
-    ].replace("%", "");
-    // Find the last math operation
-    let LastoperationIndex = -1;
-    for (let i = expression.length - 1; i >= 0; i--) {
-      if (["+", "-", "*", "/"].includes(expression[i])) {
-        LastoperationIndex = i;
-        break;
-      }
-    }
-
-    let operation = [...expression];
-    operation.splice(LastoperationIndex, 2);
-    let operationStr = operation.join("");
-    let operationResult = eval(operationStr);
-
-    const percentageValue =
-      parseFloat(expression[LastoperationIndex + 1]) / 100;
-    let result = operationResult * percentageValue;
-    setScreen(
-      `${operationStr.replace(/\*/g, "x")}${
-        expression[LastoperationIndex]
-      }${result}`
-    );
-  };
 
   const handleResult = () => {
     if (screen == 0) {

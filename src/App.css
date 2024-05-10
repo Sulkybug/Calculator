@@ -39,7 +39,7 @@ body {
 .operation {
   margin-bottom: 10px;
   max-width: 540px;
-  overflow-x: auto;
+  overflow: auto;
   display: flex;
   align-items: center;
   justify-content: left;
@@ -47,7 +47,10 @@ body {
   scrollbar-gutter: none;
   scrollbar-color: rgba(255, 68, 0, 0.315) #242424;
   scrollbar-width: thin;
-  max-height: 75px;
+  max-height: 67.5px;
+  max-width: 480px;
+  margin-top: 45px;
+  padding: 20px;
 }
 
 .result {
