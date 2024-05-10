@@ -195,7 +195,7 @@ button:active {
 @media (max-width: 800px) {
   #root {
     scale: 0.7;
-    min-height: 650px;
+    min-height: 740px;
   }
 
   #container {
