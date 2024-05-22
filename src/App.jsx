@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import numbers from "./assets/ButtonsContent/Numbers";
-import operators from "./assets/ButtonsContent/Operators";
-import { handlePercentage } from "./assets/Functions/handlePercentage ";
-import { checkSymbols } from "./assets/Functions/checkSymbols ";
+import numbers from "./ButtonsContent/Numbers";
+import operators from "./ButtonsContent/Operators";
+import { handlePercentage } from "./Functions/handlePercentage ";
+import { checkSymbols } from "./Functions/checkSymbols ";
 
 function App() {
   const [screen, setScreen] = useState("0");
