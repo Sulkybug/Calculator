@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, createRef } from "react";
 import "./App.css";
 import numbers from "./ButtonsContent/Numbers";
 import operators from "./ButtonsContent/Operators";
@@ -8,6 +8,11 @@ import { checkSymbols } from "./Functions/checkSymbols ";
 function App() {
   const [screen, setScreen] = useState("0");
   const [result, setResult] = useState("");
+
+  const buttonNumRef = useRef(numbers.map(() => createRef()));
+  const buttonOpRef = useRef(operators.map(() => createRef()));
+  const buttonDeleteRef = useRef(null);
+  const buttonResultRef = useRef(null);
 
   const handleClick = (e) => {
     let value = e.currentTarget.getAttribute("data-value");
@@ -78,6 +83,50 @@ function App() {
       setScreen(screen.slice(0, -1));
     }
   };
+  //keyDown utility
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const key = event.key;
+
+      if (key == "Enter") {
+        buttonResultRef.current.click();
+      }
+
+      if (key >= "0" && key <= "9") {
+        const indexNum = numbers.findIndex((num) => num.num.toString() === key);
+
+        if (indexNum !== -1 && buttonNumRef.current[indexNum].current) {
+          buttonNumRef.current[indexNum].current.click();
+        }
+      }
+      if (
+        key == "/" ||
+        key == "+" ||
+        key == "-" ||
+        key == "*" ||
+        key == "." ||
+        key == "%"
+      ) {
+        if (key == "*") {
+          buttonOpRef.current[3].current.click();
+        } else {
+          const indexOp = operators.findIndex(
+            (symbol) => symbol.symbol === key
+          );
+          if (indexOp !== -1 && buttonOpRef.current[indexOp].current) {
+            buttonOpRef.current[indexOp].current.click();
+          }
+        }
+      }
+      if (key == "Backspace") {
+        buttonDeleteRef.current.click();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -87,23 +136,25 @@ function App() {
       </div>
 
       <div className="container">
-        {operators.map((value) => (
+        {operators.map((value, indexOp) => (
           <button
             key={value.name}
             onClick={handleClickOp}
             className={`operatorsKeys ${value.name}`}
             data-value={value.symbol}
+            ref={buttonOpRef.current[indexOp]}
           >
             {value.symbol}
           </button>
         ))}
 
-        {numbers.map((number) => (
+        {numbers.map((number, indexNum) => (
           <button
             key={number.num}
             onClick={handleClick}
             data-value={number.num}
             className={number.name}
+            ref={buttonNumRef.current[indexNum]}
           >
             {number.num}
           </button>
@@ -111,10 +162,18 @@ function App() {
         <button className="operatorsKeys clear" onClick={clearScreen}>
           C
         </button>
-        <button className="operatorsKeys delete" onClick={handleDelete}>
+        <button
+          className="operatorsKeys delete"
+          onClick={handleDelete}
+          ref={buttonDeleteRef}
+        >
           ⌫
         </button>
-        <button className="resultButton" onClick={handleResult}>
+        <button
+          className="resultButton"
+          onClick={handleResult}
+          ref={buttonResultRef}
+        >
           =
         </button>
       </div>
